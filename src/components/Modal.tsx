@@ -1,4 +1,4 @@
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import { Fragment } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import { Recipe } from "../types";
@@ -31,68 +31,68 @@ export default function Modal() {
     return (
         <>
             <Transition appear show={modal} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                    <TransitionChild
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black bg-opacity-70" />
-                    </TransitionChild>
+                <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => {}}>
+                    <div className="flex items-center justify-center min-h-screen px-4 text-center">
+                        <TransitionChild
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-70" />
+                        </TransitionChild>
 
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <TransitionChild
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6">
-                                    <DialogTitle
-                                        as="h3"
-                                        className="text-gray-900 text-4xl font-extrabold my-5 text-center"
-                                    >
+                        <TransitionChild
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <div className="inline-block w-11/12 sm:w-4/5 md:w-[500px] max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
+                                <div className="modal-header flex justify-between items-center border-b p-4">
+                                    <DialogTitle as="h3" className="text-3xl font-extrabold text-center leading-6 text-gray-900">
                                         {selectedRecipe.strDrink}
                                     </DialogTitle>
+                                    <button
+                                        type="button"
+                                        className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        onClick={closeModal}
+                                    >
+                                        <span className="sr-only">Close</span>
+                                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="modal-body p-4 overflow-y-auto max-h-96 md:max-h-[500px]">
                                     <img 
                                         src={`${selectedRecipe.strDrinkThumb}`} 
                                         alt={`Imagen de ${selectedRecipe.strDrink}`}
-                                        className="h-96 mx-auto object-cover rounded-lg"
+                                        className="h-auto sm:h-96 mx-auto object-cover rounded-lg"
                                     />
-                                    <DialogTitle
-                                        as="h3"
-                                        className="text-gray-900 text-2xl font-extrabold my-5"
-                                    >
-                                        Ingredientes y Cantidades
-                                    </DialogTitle>
-                                    {renderIngredients()}
-                                    <DialogTitle
-                                        as="h3"
-                                        className="text-gray-900 text-2xl font-extrabold my-5"
-                                    >
-                                        Instrucciones
-                                    </DialogTitle>
+                                    <h3 className="text-gray-900 text-2xl font-extrabold my-5">Ingredientes y Cantidades</h3>
+                                    <ul>
+                                        {renderIngredients()}
+                                    </ul>
+                                    <h3 className="text-gray-900 text-2xl font-extrabold my-5">Instrucciones</h3>
                                     <p className="text-lg">{selectedRecipe.strInstructions}</p>
-
-                                    <div className="flex justify-between gap-4 mt-5">
-                                        <button className="w-full bg-gray-600 hover:bg-gray-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg" onClick={closeModal}>
-                                            Cerrar
-                                        </button>
-                                        <button className="w-full bg-orange-600 hover:bg-orange-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg">
-                                            Agregar a Favoritos
-                                        </button>
-                                    </div>
-                                </DialogPanel>
-                            </TransitionChild>
-                        </div>
+                                </div>
+                                <div className="modal-footer flex flex-col md:flex-row justify-between gap-4 border-t p-4 mt-1">
+                                    <button className="w-full bg-gray-600 hover:bg-gray-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg" onClick={closeModal}>
+                                        Cerrar
+                                    </button>
+                                    <button className="w-full bg-orange-600 hover:bg-orange-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg">
+                                        Agregar a Favoritos
+                                    </button>
+                                </div>
+                            </div>
+                        </TransitionChild>
                     </div>
                 </Dialog>
             </Transition>
