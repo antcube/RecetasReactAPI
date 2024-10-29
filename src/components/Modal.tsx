@@ -1,5 +1,5 @@
 import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import { Recipe } from "../types";
 
@@ -7,6 +7,14 @@ export default function Modal() {
     const selectedRecipe = useAppStore(state => state.selectedRecipe);
     const modal = useAppStore(state => state.modal);
     const closeModal = useAppStore(state => state.closeModal);
+    const handleClickFavorite = useAppStore(state => state.handleClickFavorite);
+    const favoriteExists = useAppStore(state => state.favoriteExists);
+
+    const [isFavorite, setIsFavorite] = useState(() => favoriteExists(selectedRecipe.idDrink));
+
+    useEffect(() => {
+        setIsFavorite(favoriteExists(selectedRecipe.idDrink));
+    }, [selectedRecipe, favoriteExists]);
 
     const renderIngredients = () => {
         const ingredients: JSX.Element[] = [];
@@ -31,7 +39,7 @@ export default function Modal() {
     return (
         <>
             <Transition appear show={modal} as={Fragment}>
-                <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => {}}>
+                <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
                     <div className="flex items-center justify-center min-h-screen px-4 text-center">
                         <TransitionChild
                             as={Fragment}
@@ -87,8 +95,13 @@ export default function Modal() {
                                     <button className="w-full bg-gray-600 hover:bg-gray-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg" onClick={closeModal}>
                                         Cerrar
                                     </button>
-                                    <button className="w-full bg-orange-600 hover:bg-orange-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg">
-                                        Agregar a Favoritos
+                                    <button className="w-full bg-orange-600 hover:bg-orange-500 transition-all duration-300 rounded-lg p-3 text-white uppercase font-bold shadow-lg"
+                                        onClick={() => {
+                                            handleClickFavorite(selectedRecipe);
+                                            setIsFavorite(!isFavorite);
+                                        }}
+                                    >
+                                        {isFavorite ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
                                     </button>
                                 </div>
                             </div>
