@@ -1,9 +1,13 @@
 import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import { Recipe } from "../types";
+import { useLocation } from "react-router-dom";
 
 export default function Modal() {
+    const { pathname } = useLocation();
+    const isFavoritesPage = useMemo(() => pathname === "/favoritos", [pathname]);
+
     const selectedRecipe = useAppStore(state => state.selectedRecipe);
     const modal = useAppStore(state => state.modal);
     const closeModal = useAppStore(state => state.closeModal);
@@ -39,7 +43,7 @@ export default function Modal() {
     return (
         <>
             <Transition appear show={modal} as={Fragment}>
-                <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
+                <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => {}}>
                     <div className="flex items-center justify-center min-h-screen px-4 text-center">
                         <TransitionChild
                             as={Fragment}
@@ -99,6 +103,9 @@ export default function Modal() {
                                         onClick={() => {
                                             handleClickFavorite(selectedRecipe);
                                             setIsFavorite(!isFavorite);
+                                            if(isFavoritesPage) {
+                                                closeModal();
+                                            }
                                         }}
                                     >
                                         {isFavorite ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
