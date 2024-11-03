@@ -12,6 +12,7 @@ export default function Header() {
     const fetchCategories = useAppStore(state => state.fetchCategories);
     const categories = useAppStore(state => state.categories);
     const searchRecipes = useAppStore(state => state.searchRecipes);
+    const showNotification = useAppStore(state => state.showNotification);
 
     useEffect(() => {
         fetchCategories()
@@ -23,6 +24,15 @@ export default function Header() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if(searchFilter === "") {
+            showNotification({
+                text: "El campo categoría es obligatorio",
+                error: true
+            })
+            return;
+        }
+
         searchRecipes(searchFilter);
     }
 

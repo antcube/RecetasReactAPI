@@ -7,6 +7,8 @@ import { useAppStore } from "../stores/useAppStore";
 export default function Notification() {
     const notification = useAppStore(state => state.notification);
     const hiddenNotification = useAppStore(state => state.hiddenNotification);
+    const isVisible = useAppStore(state => state.isVisible);
+    const setIsVisible = useAppStore(state => state.setIsVisible);
 
     return (
         <div
@@ -15,7 +17,7 @@ export default function Notification() {
         >
             <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
                 <Transition
-                    show={notification.show}
+                    show={isVisible}
                     as={Fragment}
                     enter="transform ease-out duration-300 transition"
                     enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
@@ -52,7 +54,12 @@ export default function Notification() {
                                     <button
                                         type="button"
                                         className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                        onClick={hiddenNotification}
+                                        onClick={() => {
+                                            setIsVisible(false);
+                                            setTimeout(() => {
+                                                hiddenNotification();
+                                            }, 300);
+                                        }}
                                     >
                                         <span className="sr-only">Cerrar</span>
                                         <XMarkIcon

@@ -3,23 +3,24 @@ import { StateCreator } from "zustand";
 type Notification = {
     text: string
     error: boolean
-    show: boolean
 }
 
 export type NotificationSliceType = {
     notification: Notification
     timeoutId: number | undefined
-    showNotification: (payload: Pick<Notification, 'text' | 'error'>) => void
+    isVisible: boolean
+    showNotification: (payload: Notification) => void
     hiddenNotification: () => void
+    setIsVisible: (isVisible: boolean) => void
 }
 
 export const createNotificationSlice: StateCreator<NotificationSliceType & NotificationSliceType, [], [], NotificationSliceType> = (set, get) => ({
     notification: {
         text: '',
-        error: false,
-        show: false
+        error: false
     },
     timeoutId: undefined,
+    isVisible: false,
     showNotification: (payload) => {
         if(get().timeoutId) {
             clearTimeout(get().timeoutId);
@@ -29,22 +30,31 @@ export const createNotificationSlice: StateCreator<NotificationSliceType & Notif
             notification: {
                 text: payload.text,
                 error: payload.error,
-                show: true
-            }
+            },
+            isVisible: true
         })
 
         const timeoutId = setTimeout(() => {
-            get().hiddenNotification()
+            set({ isVisible: false })
+            setTimeout(() => {
+                get().hiddenNotification()
+            }, 300); // Duración de la transición
         }, 3000);
         set({ timeoutId })
     },
     hiddenNotification: () => {
+        if(get().timeoutId) {
+            clearTimeout(get().timeoutId);
+        }
         set({
             notification: {
                 text: '',
-                error: false,
-                show: false
-            }
+                error: false
+            },
+            timeoutId: undefined
         })
+    },
+    setIsVisible: (isVisible) => {
+        set({ isVisible })
     }
 })

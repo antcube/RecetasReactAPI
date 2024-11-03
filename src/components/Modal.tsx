@@ -1,4 +1,5 @@
 import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import { Recipe } from "../types";
@@ -73,20 +74,20 @@ export default function Modal() {
                                     </DialogTitle>
                                     <button
                                         type="button"
-                                        className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 hover:scale-110 transition-all duration-300" 
                                         onClick={closeModal}
                                     >
-                                        <span className="sr-only">Close</span>
-                                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        <XMarkIcon
+                                            className="h-6 w-6"
+                                            aria-hidden="true"
+                                        />
                                     </button>
                                 </div>
-                                <div className="modal-body p-4 overflow-y-auto max-h-96 md:max-h-[500px]">
+                                <div className="modal-body p-4 overflow-y-auto max-h-[440px] md:max-h-[500px]">
                                     <img 
                                         src={`${selectedRecipe.strDrinkThumb}`} 
                                         alt={`Imagen de ${selectedRecipe.strDrink}`}
-                                        className="h-auto sm:h-96 mx-auto object-cover rounded-lg"
+                                        className="h-[22rem] sm:h-96 mx-auto object-cover rounded-lg"
                                     />
                                     <h3 className="text-gray-900 text-2xl font-extrabold my-5">Ingredientes y Cantidades</h3>
                                     <ul>
