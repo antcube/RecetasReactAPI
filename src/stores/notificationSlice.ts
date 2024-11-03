@@ -1,4 +1,5 @@
 import { StateCreator } from "zustand";
+import { FavoritesSliceType } from "./favoritesSlice";
 
 type Notification = {
     text: string
@@ -14,7 +15,7 @@ export type NotificationSliceType = {
     setIsVisible: (isVisible: boolean) => void
 }
 
-export const createNotificationSlice: StateCreator<NotificationSliceType & NotificationSliceType, [], [], NotificationSliceType> = (set, get) => ({
+export const createNotificationSlice: StateCreator<NotificationSliceType & FavoritesSliceType, [], [], NotificationSliceType> = (set, get) => ({
     notification: {
         text: '',
         error: false
